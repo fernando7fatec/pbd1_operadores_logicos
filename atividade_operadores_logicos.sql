@@ -105,9 +105,45 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Chama e testa a funcao()
-SELECT calculaValorDeVenda(30)
+SELECT calculaValorDeVenda(30);
 
 
+
+-- Solucao do desafio 1.5:
+
+CREATE OR REPLACE FUNCTION calculaSalario()
+RETURNS NUMERIC AS $$
+DECLARE
+    salarioAtual NUMERIC;
+    salarioReajus NUMERIC;
+    raise_amount NUMERIC;
+    porcentagem NUMERIC;
+BEGIN
+    salarioAtual := 1000.00;  
+
+    IF salarioAtual <= 400.00 THEN
+        porcentagem := 15;
+    ELSIF salarioAtual <= 800.00 THEN
+        porcentagem := 12;
+    ELSIF salarioAtual <= 1200.00 THEN
+        porcentagem := 10;
+    ELSIF salarioAtual <= 2000.00 THEN
+        porcentagem := 7;
+    ELSE
+        porcentagem := 4;
+    END IF;
+
+    raise_amount := (salarioAtual * porcentagem) / 100;
+    salarioReajus := salarioAtual + raise_amount;
+
+    RAISE NOTICE 'Salario Atual: %.2f', salarioAtual;
+    RAISE NOTICE 'Salario Reajustado: %.2f', salarioReajus;
+    RAISE NOTICE 'Aumento Sal.: %.2f', raise_amount;
+    RAISE NOTICE 'Porcentagem: %.0f%%', porcentagem;
+	RETURN salarioReajus;
+	
+END;
+$$ LANGUAGE plpgsql;
 
 
 
